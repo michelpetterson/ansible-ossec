@@ -1,0 +1,7 @@
+- hosts: all:!server.domain.com
+  become: true
+  environment:
+    PATH: "{{ root_path }}"
+  roles:
+    - { role: ossim-config, ossec_server_ip: 172.22.0.101, ossec_server_name: server.domain.com }
+

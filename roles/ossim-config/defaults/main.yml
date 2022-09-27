@@ -1,0 +1,18 @@
+---
+# defaults file for ossec-agent
+
+ossec_server_name: "server.domain.com"
+ossec_server_fqdn: "server.domain.com"
+ossec_managed_server: true
+ossec_agent_package_name: https://updates.atomicorp.com/channels/ossec/debian/pool/main/o/ossec-hids-agent/ossec-hids-agent_2.9.4.5512wheezy_amd64.deb
+ossec_server_ip: 10.0.2.2
+
+# Set to an empty string or null to disable adding a key
+ossec_agent_debian_repository_key: "https://www.atomicorp.com/RPM-GPG-KEY.atomicorp.txt"
+ossec_agent_debian_repository_url: "https://updates.atomicorp.com/channels/atomic/{{ ansible_distribution | lower }}"
+ossec_filename: "atomic-release-{{ ossec_server_atomic_release }}.el{{ ansible_distribution_major_version }}.art.noarch.rpm"
+ossec_url: "https://www.atomicorp.com/channels/atomic/centos/{{ ansible_distribution_major_version }}/x86_64/RPMS"
+ossec_download_url: "{{ ossec_url }}/{{ ossec_filename }}"
+
+ossec_server_disable_gpgkey: False
+ossec_agent_client_pass:

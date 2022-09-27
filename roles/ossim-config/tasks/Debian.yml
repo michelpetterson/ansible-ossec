@@ -1,0 +1,46 @@
+---
+- name: stat bareos file
+  stat:
+    path: /etc/apt/sources.list.d/bareos.list
+  register: file_stat
+
+- name: Move temporary
+  command: mv /etc/apt/sources.list.d/bareos.list /tmp/bareos.list
+  when: file_stat.stat.exists
+
+- name: workaround to debian repository expired keys
+  copy:
+    src: "files/10aptconf"
+    dest: /etc/apt/apt.conf.d/10aptconf
+    owner: 'root'
+    mode: '0644'
+
+- name: "Commit pending..."
+  shell: > 
+    etckeeper commit "Ansible commit all..."
+  ignore_errors: true
+
+- name: Install requirements...
+  apt:
+    name: apt-transport-https
+    state: present
+    force: yes
+
+- name: Debian/Ubuntu | Installing repository key
+  apt_key:
+    url: "{{ ossec_agent_debian_repository_key }}"
+
+- name: Debian/Ubuntu | Installing repository
+  apt_repository:
+    repo: "deb {{ ossec_agent_debian_repository_url }} {{ ansible_distribution_release }} main"
+    mode: '0644'
+    state: present
+
+- name: stat bareos file
+  stat: 
+    path: /tmp/bareos.list
+  register: file_stat_tmp
+
+- name: Move to original location
+  command: mv /tmp/bareos.list /etc/apt/sources.list.d/bareos.list
+  when: file_stat_tmp.stat.exists

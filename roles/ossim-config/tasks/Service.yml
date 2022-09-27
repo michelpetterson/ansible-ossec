@@ -1,0 +1,22 @@
+---
+
+- name: identifying service hosted in server
+  shell: >
+    ps axo user | grep -m 1 "^tomcat\|^jboss" || pgrep -xl "apache2|httpd|mysqld|postgres" | cut -d" " -f 2 | tail -n1
+  register: service
+
+- name: "copy ossec apache file to ossec-agent"
+  copy:
+    src: "files/ossec.conf.apache"
+    dest: "/var/ossec/etc/{{ ossec_agent_config_filename }}"
+    owner: 'root'
+    mode: '0644'
+  when: service.stdout == 'apache2' or service.stdout == 'httpd'
+
+- name: "copy ossec {{ service.stdout }}  file to ossec-agent"
+  copy:
+    src: "files/ossec.conf.{{ service.stdout }}"
+    dest: "/var/ossec/etc/{{ ossec_agent_config_filename }}"
+    owner: 'root'
+    mode: '0644'
+  when: service.stdout == 'mysqld' or service.stdout == 'postgres' or service.stdout == 'jboss' or service.stdout == 'tomcat'

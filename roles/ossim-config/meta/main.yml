@@ -1,0 +1,25 @@
+---
+galaxy_info:
+  author: Werner Dijkerman
+  description: Installing and maintaining the ossec-agent.
+  company: myCompany.Dotcom
+  license: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: EL
+      versions:
+        - 5
+        - 6
+        - 7
+    - name: Fedora
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - ossec
+    - ossecagent
+    - hids
+    - monitoring
+dependencies: []
